@@ -32,8 +32,8 @@
 				<ImageBrush ImageSource="PanoramaBackground.png"/>
 			</controls:Panorama.Background>
             <controls:PanoramaItem Header="Images">
-                <ListBox x:Name="ImageList" ItemTemplate="{StaticResource ImageViewModelTemplate}" ItemsSource="{Binding}" >
-
+                <ListBox x:Name="ImageList" ItemTemplate="{StaticResource ImageViewModelTemplate}" ItemsSource="{Binding}" SelectionChanged="ImageList_SelectionChanged">
+                    
                 </ListBox>
             </controls:PanoramaItem>
             <controls:PanoramaItem Header="Map">

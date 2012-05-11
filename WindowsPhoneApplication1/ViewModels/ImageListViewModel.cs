@@ -21,8 +21,8 @@ namespace ImageSpot.ViewModels
         public void AddImage(ImageViewModel img)
         {
             Debug.WriteLine("added image");
-
-            this.Add(img);
+            if (!Contains(img))
+                this.Add(img);
 
             if(_cache != null)
                 _cache.Add(img);

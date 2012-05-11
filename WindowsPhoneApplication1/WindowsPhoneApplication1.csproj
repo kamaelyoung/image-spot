@@ -22,7 +22,7 @@
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
     <XapFilename>ImageSpot.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
-    <SilverlightAppEntry>WindowsPhoneApplication1.App</SilverlightAppEntry>
+    <SilverlightAppEntry>ImageSpot.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <Utf8Output>true</Utf8Output>
@@ -50,7 +50,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FlickrNetWP7, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="FlickrNetWP7">
+      <HintPath>..\..\..\..\Desktop\FlickrNetWP7.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Phone.Controls" />
     <Reference Include="Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e" />
@@ -70,6 +72,9 @@
     </Compile>
     <Compile Include="FlickrWrapper.cs" />
     <Compile Include="ImageCache.cs" />
+    <Compile Include="ImageDetailPage.xaml.cs">
+      <DependentUpon>ImageDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -82,6 +87,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="ImageDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

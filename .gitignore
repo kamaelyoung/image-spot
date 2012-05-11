@@ -1,5 +1,7 @@
-_Resharper/*
-_Resparper\*
+../_Resparper*
+..\_Resparper*
 WindowsPhoneApplication1\Bin\*
+WindowsPhoneApplication1/Bin/*
 WindowsPhoneApplication1\obj\*
+WindowsPhoneApplication1/obj/*
 WindowsPhoneApplication1\WindowsPhoneApplication1.csproj.user

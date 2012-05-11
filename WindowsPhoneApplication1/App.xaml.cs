@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Navigation;
-using ImageSpot.ViewModels;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
@@ -48,13 +48,14 @@ namespace ImageSpot
         // Dieser Code wird nicht ausgeführt, wenn die Anwendung reaktiviert wird.
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            
         }
 
         // Bei der Aktivierung der Anwendung auszuführender Code
         // Dieser Code wird nicht beim ersten Start der Anwendung ausgeführt.
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
-
+            
         }
 
         // Bei der Deaktivierung der Anwendung auszuführender Code
@@ -110,6 +111,7 @@ namespace ImageSpot
 
             // Stellen Sie sicher, dass keine erneute Initialisierung erfolgt.
             phoneApplicationInitialized = true;
+            RootFrame.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
         }
 
         // Fügen Sie dieser Methode keinen zusätzlichen Code hinzu.
