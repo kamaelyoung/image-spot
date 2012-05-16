@@ -108,9 +108,9 @@
     <Content Include="ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Background.png">
+    <Resource Include="direction.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
     <Content Include="SplashScreenImage.jpg" />
     <Resource Include="PanoramaBackground.png" />
   </ItemGroup>

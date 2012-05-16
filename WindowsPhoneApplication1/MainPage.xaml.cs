@@ -13,7 +13,6 @@ namespace ImageSpot
     public partial class MainPage : PhoneApplicationPage
     {
         private List<GeoCoordinate> coordinates;
-        private AccelerometerSensorWithShakeDetection shake;
 
 
         // Konstruktor
