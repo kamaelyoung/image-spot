@@ -11,15 +11,11 @@
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
-	SupportedOrientations="Portrait" Orientation="Portrait"
+	SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
 	shell:SystemTray.IsVisible="False" xmlns:my="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps">
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="ImageViewModelTemplate">
-			<StackPanel>
-				<TextBlock Text="{Binding Name}"/>
-				<TextBlock Text="{Binding TakenOn}"/>
 				<Image Source="{Binding Image}" />
-			</StackPanel>
 		</DataTemplate>
 	</phone:PhoneApplicationPage.Resources>
 
@@ -27,11 +23,8 @@
 	<Grid x:Name="LayoutRoot" Background="Transparent">
 
 		<!--Panorama-Steuerelement-->
-		<controls:Panorama Title="my application">
-			<controls:Panorama.Background>
-				<ImageBrush ImageSource="PanoramaBackground.png"/>
-			</controls:Panorama.Background>
-            <controls:PanoramaItem Header="Images">
+		<controls:Panorama Title="ImageSpot">
+            <controls:PanoramaItem>
                 <ListBox x:Name="ImageList" ItemTemplate="{StaticResource ImageViewModelTemplate}" ItemsSource="{Binding}" SelectionChanged="ImageList_SelectionChanged">
                     
                 </ListBox>

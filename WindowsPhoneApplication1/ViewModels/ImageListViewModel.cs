@@ -22,7 +22,7 @@ namespace ImageSpot.ViewModels
         {
             Debug.WriteLine("added image");
             if (!Contains(img))
-                this.Add(img);
+                this.Insert(0, img);
 
             if(_cache != null)
                 _cache.Add(img);

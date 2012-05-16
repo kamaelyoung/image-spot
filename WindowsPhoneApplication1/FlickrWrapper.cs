@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Device.Location;
 using System.Windows.Media.Imaging;
+using System.Collections.Generic;
 using FlickrNet;
 using ImageSpot.ViewModels;
 
@@ -14,12 +15,13 @@ namespace ImageSpot
         private static FlickrWrapper _instance;
         private readonly Flickr _flickr;
         private GeoCoordinateWatcher _watcher;
-
+        private List<Callback> observers;
         private static readonly PhotoSearchOptions DefaultOptions = new PhotoSearchOptions
                                                                         {
                                                                             ContentType = ContentTypeSearch.PhotosOnly,
                                                                             HasGeo = true,
                                                                             PerPage = 24,
+                                                                            Accuracy = FlickrNet.GeoAccuracy.City,
                                                                             SortOrder =
                                                                                 PhotoSearchSortOrder.DatePostedDescending,
                                                                             Extras =
@@ -35,9 +37,14 @@ namespace ImageSpot
 
         private FlickrWrapper()
         {
+            observers = new List<Callback>();
             _flickr = new Flickr(Key, Secret);
-            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
-            _watcher.Start(true);
+            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) { MovementThreshold = 500 };
+            _watcher.Start(false);
+            _watcher.StatusChanged += delegate(Object sender, GeoPositionStatusChangedEventArgs a) { 
+                if(a.Status == GeoPositionStatus.Ready)
+                    GetPhotos();
+            };
         }
 
         public static FlickrWrapper GetInstance()
@@ -47,28 +54,33 @@ namespace ImageSpot
             return _instance;
         }
 
-        public void GetPhotos(Callback c)
+        public void AddObserver(Callback c)
+        {
+            if (!observers.Contains(c))
+                observers.Add(c);
+        }
+
+        public void GetPhotos()
         {
             var options = DefaultOptions;
             if (_watcher.Status == GeoPositionStatus.Ready)
             {
-                options.RadiusUnits = RadiusUnit.Kilometers;
-                options.Radius = 10;
-                options.Longitude = _watcher.Position.Location.Longitude;
-                options.Latitude = _watcher.Position.Location.Latitude;
+                options.BoundaryBox = new BoundaryBox(_watcher.Position.Location.Longitude- 0.5, _watcher.Position.Location.Latitude - 0.5, _watcher.Position.Location.Longitude + 0.5, _watcher.Position.Location.Latitude + 0.5, GeoAccuracy.City);
+                //options.Longitude = _watcher.Position.Location.Longitude;
+                //options.Latitude = _watcher.Position.Location.Latitude;
             }
             _flickr.PhotosSearchAsync(options, delegate(FlickrResult<PhotoCollection> result)
                                                          {
                                                              if (result.HasError) return;
                                                              foreach (var curr in result.Result)
                                                              {
-                                                                 c(new ImageViewModel
+                                                                 var model = new ImageViewModel
                                                                        {
                                                                            AuthorUri =
                                                                                new Uri(OwnerPrefix + curr.OwnerName),
                                                                            Name = curr.Title,
-                                                                           Image = new BitmapImage(new Uri(curr.LargeUrl)),
-                                                                           ImageUri = new Uri(curr.LargeUrl),
+                                                                           Image = new BitmapImage(new Uri(curr.Small320Url)),
+                                                                           ImageUri = new Uri(curr.Small320Url),
                                                                            Position =
                                                                                new GeoCoordinate(curr.Latitude,
                                                                                                  curr.Longitude),
@@ -76,7 +88,11 @@ namespace ImageSpot
                                                                            Id = curr.PhotoId,
                                                                            AuthorName = curr.OwnerName,
                                                                            Description = curr.Description
-                                                                       });
+                                                                       };
+                                                                 foreach (var item in observers)
+                                                                 {
+                                                                     item(model);
+                                                                 }
                                                              }
                                                          });
         }
