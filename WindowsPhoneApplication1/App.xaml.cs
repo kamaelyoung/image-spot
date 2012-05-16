@@ -8,6 +8,7 @@ namespace ImageSpot
 {
     public partial class App : Application
     {
+        
         /// <summary>
         /// Ermöglicht den einfachen Zugriff auf den Hauptframe der Phone-Anwendung.
         /// </summary>
@@ -44,6 +45,8 @@ namespace ImageSpot
             InitializePhoneApplication();
         }
 
+        
+
         // Beim Start der Anwendung auszuführender Code
         // Dieser Code wird nicht ausgeführt, wenn die Anwendung reaktiviert wird.
         private void Application_Launching(object sender, LaunchingEventArgs e)
@@ -68,6 +71,7 @@ namespace ImageSpot
         // Dieser Code wird nicht ausgeführt, wenn die Anwendung deaktiviert wird.
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+         
         }
 
         // Bei einem Navigationsfehler auszuführender Code

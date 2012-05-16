@@ -11,7 +11,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait"  Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
     shell:SystemTray.IsVisible="False" Loaded="PhoneApplicationPage_Loaded">
 
     <!--LayoutRoot enthält das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
@@ -20,7 +20,7 @@
 
             <!--Panoramaelement eins-->
             <controls:PanoramaItem Header="Image">
-                <Image Source="{Binding Path=Image}"></Image>
+                <Image Source="{Binding Path=Image}" Margin="0,0,0,5" />
             </controls:PanoramaItem>
 
             <!--Panoramaelement zwei-->

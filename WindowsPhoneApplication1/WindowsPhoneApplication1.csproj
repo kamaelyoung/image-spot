@@ -83,7 +83,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShakeDetect.cs" />
     <Compile Include="ViewModels\ImageListViewModel.cs" />
     <Compile Include="ViewModels\ImageViewModel.cs" />
   </ItemGroup>

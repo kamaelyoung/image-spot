@@ -1,24 +1,29 @@
-﻿using System.Diagnostics;
+﻿using System.Device.Location;
+using System.Diagnostics;
 using System.Windows;
 using ImageSpot.ViewModels;
 using Microsoft.Phone.Controls;
+
 
 namespace ImageSpot
 {
     public partial class ImageDetailPage : PhoneApplicationPage
     {
+        ImageViewModel item;
         public ImageDetailPage()
         {
             InitializeComponent();
         }
 
+
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             if (NavigationContext.QueryString.ContainsKey("id"))
             {
-                DataContext = ImageCache.GetInstance().Get(NavigationContext.QueryString["id"]);
-                DetailGrid.DataContext = ImageCache.GetInstance().Get(NavigationContext.QueryString["id"]);
-                imageMap.DataContext = ImageCache.GetInstance().Get(NavigationContext.QueryString["id"]);
+                item = ImageCache.GetInstance().Get(NavigationContext.QueryString["id"]);
+                DataContext = item;
+                DetailGrid.DataContext = item;
+                imageMap.DataContext = item;
                 AutoFocusMap();
             }
         }

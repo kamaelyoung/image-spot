@@ -36,5 +36,16 @@ namespace ImageSpot
             else
                 return null;
         }
+
+        public String Random()
+        {
+            if (_cache.Count == 0)
+                return "";
+            Random rnd = new Random();
+            int id = rnd.Next(0, _cache.Count);
+            var arr = new ImageViewModel[_cache.Count];
+            _cache.Values.CopyTo(arr, 0);
+            return arr[id].Id;
+        }
     }
 }
