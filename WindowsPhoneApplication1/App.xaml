@@ -13,4 +13,12 @@
 			Launching="Application_Launching" Closing="Application_Closing" 
 			Activated="Application_Activated" Deactivated="Application_Deactivated"/>
 	</Application.ApplicationLifetimeObjects>
+    
+    <Application.Resources>
+        <shell:ApplicationBar x:Name="globalApplicationBar" x:Key="globalApplicationBar" Opacity="0.7">
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="About / Privacy" Click="ApplicationBarMenuItem_Click" />
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </Application.Resources>
 </Application>

@@ -12,14 +12,18 @@
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
-	shell:SystemTray.IsVisible="False" xmlns:my="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps">
+	shell:SystemTray.IsVisible="False" xmlns:my="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
+    ApplicationBar="{StaticResource globalApplicationBar}"
+    >
 	<phone:PhoneApplicationPage.Resources>
-		<DataTemplate x:Key="ImageViewModelTemplate">
-				<Image Source="{Binding Image}" />
-		</DataTemplate>
-	</phone:PhoneApplicationPage.Resources>
+        <DataTemplate x:Key="ImageViewModelTemplate">
+            <Image Source="{Binding Image}" />
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
 
-	<!--Das LayoutRoot-Objekt ist das Stammraster, das den gesamten Seiteninhalt aufnimmt.-->
+    
+
+    <!--Das LayoutRoot-Objekt ist das Stammraster, das den gesamten Seiteninhalt aufnimmt.-->
 	<Grid x:Name="LayoutRoot" Background="Transparent">
 
 		<!--Panorama-Steuerelement-->

@@ -112,6 +112,11 @@ namespace ImageSpot
             }
         }
 
+        private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
+        {
+            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(new Uri("/Disclaimer.xaml", UriKind.Relative));
+        }
+
         // Bei unbehandelten Ausnahmen auszuführender Code
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
