@@ -48,6 +48,17 @@ namespace ImageSpot
             return arr[id];
         }
 
+        public Uri RandomImageUrl()
+        {
+            if (_cache.Count == 0)
+                return new Uri(@"file:///Family_christmas;component/ApplicationIcon.png");
+            Random rnd = new Random();
+            int id = rnd.Next(0, _cache.Count);
+            var arr = new ImageViewModel[_cache.Count];
+            _cache.Values.CopyTo(arr, 0);
+            return arr[id].ImageUri;
+        }
+
         public String Random()
         {
             if (_cache.Count == 0)

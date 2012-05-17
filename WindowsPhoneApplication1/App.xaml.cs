@@ -4,12 +4,13 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System.ComponentModel;
+using System.Linq;
 
 namespace ImageSpot
 {
     public partial class App : Application
     {
-        BackgroundWorker bw = new BackgroundWorker();
+        BackgroundWorker bw;
         
         /// <summary>
         /// Ermöglicht den einfachen Zugriff auf den Hauptframe der Phone-Anwendung.
@@ -45,31 +46,8 @@ namespace ImageSpot
 
             // Phone-spezifische Initialisierung
             InitializePhoneApplication();
-            bw.WorkerSupportsCancellation = false;
-            bw.WorkerReportsProgress = false;
-            bw.DoWork += delegate(object sender, DoWorkEventArgs e)
-            {
-                ViewModels.ImageViewModel img = null;
-                while (img == null)
-                {
-                    System.Threading.Thread.Sleep(10000);
-                    img = ImageCache.GetInstance().RandomImage();
-                }
-
-                var appTile = Microsoft.Phone.Shell.ShellTile.ActiveTiles.GetEnumerator().Current;
-                if (appTile != null)
-                {
-                    var standardTile = new StandardTileData
-                    {
-                        Title = "ImageSpot",
-                        BackgroundImage = img.ImageUri,
-                        BackTitle = img.Name,
-                        BackContent = img.Description
-                    };
-                    appTile.Update(standardTile);
-                }
-            };
-            bw.RunWorkerAsync();
+            UpdateTile();
+            
         }
 
 
@@ -87,6 +65,33 @@ namespace ImageSpot
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
             
+        }
+
+        private void UpdateTile()
+        {
+            bw = new BackgroundWorker();
+            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+            bw.RunWorkerAsync();
+        }
+
+        void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            String id = "";
+            while (id == "")
+            {
+                System.Threading.Thread.Sleep(10000);
+                id = ImageCache.GetInstance().Random();
+            }
+
+            ShellTile TileToFind = ShellTile.ActiveTiles.First();
+            if (TileToFind != null)
+            {
+                StandardTileData NewTileData = new StandardTileData
+                {
+                    BackgroundImage = ImageCache.GetInstance().RandomImageUrl(),
+                };
+                TileToFind.Update(NewTileData);
+            }
         }
 
         // Bei der Deaktivierung der Anwendung auszuführender Code
