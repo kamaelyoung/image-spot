@@ -37,6 +37,17 @@ namespace ImageSpot
                 return null;
         }
 
+        public ImageViewModel RandomImage()
+        {
+            if (_cache.Count == 0)
+                return null;
+            Random rnd = new Random();
+            int id = rnd.Next(0, _cache.Count);
+            var arr = new ImageViewModel[_cache.Count];
+            _cache.Values.CopyTo(arr, 0);
+            return arr[id];
+        }
+
         public String Random()
         {
             if (_cache.Count == 0)

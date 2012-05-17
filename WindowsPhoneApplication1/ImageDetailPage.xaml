@@ -19,7 +19,7 @@
         <controls:Panorama Title="{Binding Path=Name}">
 
             <!--Panoramaelement eins-->
-            <controls:PanoramaItem Header="Image">
+            <controls:PanoramaItem>
                 <Image Source="{Binding Path=Image}" Margin="0,0,0,5" />
             </controls:PanoramaItem>
 
@@ -51,18 +51,19 @@
 
                     <TextBlock Text="Distance" Grid.Row="3" Grid.Column="0"/>
                     <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="2">
-                        <TextBlock Text="{Binding Path=Distance}"/>
-                        <TextBlock Text="{Binding Path=DistanceUnit}"/>
+                        <TextBlock Name="txtDistance" Text="???"/>
+                        <TextBlock Name="txtDistanceUnit" Text="m/km?"/>
                     </StackPanel>
 
                     <TextBlock Text="Bearing" Grid.Row="4" Grid.Column="0"/>
-                    <TextBlock Text="{Binding Path=Bearing}" Grid.Row="4" Grid.Column="2" Unloaded="TextBlock_Unloaded" />
-                    <Image Name="DirectionImage" Grid.Column="2" Grid.Row="4" Height="48" HorizontalAlignment="Left" Margin="194,4,0,0" Stretch="Fill" VerticalAlignment="Top" Width="56" Source="/ImageSpot;component/direction.png" Grid.ColumnSpan="2">
-                        <Image.RenderTransform>
-                            <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding Path=Bearing}" />
-                        </Image.RenderTransform>
-                    </Image>
+                    <TextBlock Name="txtBearing" Text="???" Grid.Row="4" Grid.Column="2"/>
                 </Grid>
+            </controls:PanoramaItem>
+            <controls:PanoramaItem Header="Direction">
+                <StackPanel Grid.Row="5" Grid.Column="2">
+                    <TextBlock x:Name="noDir" Text="No coordinates set" FontSize="{StaticResource PhoneFontSizeExtraLarge}" Visibility="Visible"/>
+                    <Line x:Name="magneticLine" X1="240" Y1="350" X2="240" Y2="270" Stroke="{StaticResource PhoneForegroundBrush}" StrokeThickness="4" Visibility="Collapsed" />
+                </StackPanel>
             </controls:PanoramaItem>
             <controls:PanoramaItem Header="Map">
                 <my:Map Name="imageMap" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" CredentialsProvider="Ali1Stmfjuf-ZgXdttZmEFzgDUE1KQI4CrtIp36GRyYuD2q-Ic9PhcHcFR1alJ6G" DataContext="{Binding}">

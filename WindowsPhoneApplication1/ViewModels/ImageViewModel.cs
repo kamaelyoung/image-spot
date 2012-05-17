@@ -7,40 +7,8 @@ using System.Windows.Threading;
 
 namespace ImageSpot.ViewModels
 {
-    public class ImageViewModel : INotifyPropertyChanged, IDisposable
+    public class ImageViewModel : INotifyPropertyChanged
     {
-        private GeoCoordinateWatcher _watcher;
-        Compass compass;
-        private Dispatcher _dispatcher;
-        private double _lastCompass;
-
-        public void GoLive(Dispatcher d)
-        {
-            _dispatcher = d;
-            compass = new Compass();
-            compass.TimeBetweenUpdates = new TimeSpan(0, 0, 0, 0, 500);
-            compass.CurrentValueChanged += delegate(object sender, SensorReadingEventArgs<CompassReading> e)
-            {
-                RecalcBearing();
-            };
-            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) { MovementThreshold = 500 };
-            _watcher.PositionChanged += delegate(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
-            {
-                this.Position = Position;
-                RecalcPosition();
-            };
-
-
-            _watcher.StatusChanged += delegate(Object sender, GeoPositionStatusChangedEventArgs a)
-            {
-                if (a.Status == GeoPositionStatus.Ready)
-                    RecalcPosition();
-            };
-
-            _watcher.Start(false);
-            compass.Start();
-        }
-
         private string _name;
         public String Name
         {
@@ -122,84 +90,19 @@ namespace ImageSpot.ViewModels
             }
         }
 
-        private string _distanceUnit;
-        public String DistanceUnit
-        {
-            get { return _distanceUnit; }
-        }
-
-        private double _bearing;
-        public double Bearing
-        {
-            get { return _bearing; }
-        }
-
-        private double _distance;
-        public double Distance
-        {
-            get { return _distance; }
-        }
-
+        public event PropertyChangedEventHandler PropertyChanged;
         private void Notify(String propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                if (_dispatcher.CheckAccess())
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }
-                else
-                {
-                    _dispatcher.BeginInvoke(PropertyChanged, this, new PropertyChangedEventArgs(propertyName));
-                }
-            }
+            if(PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+        
 
         public override bool Equals(object obj)
         {
             if ((obj is ImageViewModel))
                 return (obj as ImageViewModel).Id == Id;
             return false;
-        }
-
-        private void RecalcPosition()
-        {
-            if (_watcher == null || _watcher.Status != GeoPositionStatus.Ready || Position == null) return;
-            double distance = Position.GetDistanceTo(_watcher.Position.Location);
-            if (distance > 1000)
-            {
-                _distanceUnit = "km";
-                _distance = Math.Round(distance / 1000.0, 2);
-            }
-            else
-            {
-                _distanceUnit = "m";
-                _distance = Math.Round(distance, 2);
-            }
-            Notify("DistanceUnit");
-            Notify("Distance");
-            RecalcBearing();
-        }
-
-        public void RecalcBearing()
-        {
-            if (_watcher == null || compass == null || _watcher.Status != GeoPositionStatus.Ready || Position == null || !compass.IsDataValid) return;
-            var p1 = Position;
-            var p2 = _watcher.Position.Location;
-            double deltaLon = Math.Abs(p1.Longitude - p2.Longitude);
-            double deltaLat = Math.Abs(p1.Latitude - p2.Latitude);
-            double bearing = Math.Atan2(Math.Sin(deltaLon) * Math.Cos(p2.Latitude), Math.Cos(p1.Latitude) * Math.Sin(p2.Latitude) - Math.Sin(p1.Latitude) * Math.Cos(p2.Latitude) * Math.Cos(deltaLon));
-            _bearing = Math.Round(bearing - compass.CurrentValue.TrueHeading, 3);
-            Notify("Bearing");
-        }
-
-        public void Dispose()
-        {
-            _watcher.Stop();
-            _watcher.Dispose();
-            compass.Stop();
-            compass.Dispose();
         }
     }
 }

@@ -3,11 +3,13 @@ using System.Windows;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using System.ComponentModel;
 
 namespace ImageSpot
 {
     public partial class App : Application
     {
+        BackgroundWorker bw = new BackgroundWorker();
         
         /// <summary>
         /// Ermöglicht den einfachen Zugriff auf den Hauptframe der Phone-Anwendung.
@@ -43,7 +45,33 @@ namespace ImageSpot
 
             // Phone-spezifische Initialisierung
             InitializePhoneApplication();
+            bw.WorkerSupportsCancellation = false;
+            bw.WorkerReportsProgress = false;
+            bw.DoWork += delegate(object sender, DoWorkEventArgs e)
+            {
+                ViewModels.ImageViewModel img = null;
+                while (img == null)
+                {
+                    System.Threading.Thread.Sleep(10000);
+                    img = ImageCache.GetInstance().RandomImage();
+                }
+
+                var appTile = Microsoft.Phone.Shell.ShellTile.ActiveTiles.GetEnumerator().Current;
+                if (appTile != null)
+                {
+                    var standardTile = new StandardTileData
+                    {
+                        Title = "ImageSpot",
+                        BackgroundImage = img.ImageUri,
+                        BackTitle = img.Name,
+                        BackContent = img.Description
+                    };
+                    appTile.Update(standardTile);
+                }
+            };
+            bw.RunWorkerAsync();
         }
+
 
         
 
