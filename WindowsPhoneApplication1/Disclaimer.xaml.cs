@@ -30,6 +30,20 @@ namespace ImageSpot
                         </p>
                     </body>
                 </html>");
+            var settings = System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings;
+            if(!settings.Contains("allowGps"))
+                settings.Add("allowGps", false);
+            chkGps.IsChecked = settings["allowGps"] as Boolean?;
+            chkGps.Click += new RoutedEventHandler(chkGps_Click);
         }
+
+        void chkGps_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings;
+            settings["allowGps"] = chkGps.IsChecked;
+            settings.Save();
+        }
+
+       
     }
 }

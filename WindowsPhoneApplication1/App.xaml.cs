@@ -57,7 +57,18 @@ namespace ImageSpot
         // Dieser Code wird nicht ausgeführt, wenn die Anwendung reaktiviert wird.
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            
+            var appSettings = System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings;
+            if (!appSettings.Contains("allowGps") || appSettings["allowGps"] as Boolean? == false)
+            {
+                if(!appSettings.Contains("allowGps"))
+                    appSettings.Add("allowGps", false);
+                var result = MessageBox.Show("This application uses your location. Do you agree?", "Privacy", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                    appSettings["allowGps"] =  true;
+                else
+                    appSettings["allowGps"] = false;
+            }
+            appSettings.Save();
         }
 
         // Bei der Aktivierung der Anwendung auszuführender Code

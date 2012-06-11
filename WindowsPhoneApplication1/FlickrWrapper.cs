@@ -4,12 +4,14 @@ using System.Windows.Media.Imaging;
 using System.Collections.Generic;
 using FlickrNet;
 using ImageSpot.ViewModels;
+using System.IO.IsolatedStorage;
 
 namespace ImageSpot
 {
     public class FlickrWrapper
     {
         private const string Key = "9b23a7f748aadf005f5bd023fadcd879";
+        IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
         private const string Secret = "f2e35e13b2b59d60";
         private const string OwnerPrefix = @"http://www.flickr.com/people/";
         private static FlickrWrapper _instance;
@@ -39,12 +41,21 @@ namespace ImageSpot
         {
             observers = new List<Callback>();
             _flickr = new Flickr(Key, Secret);
-            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) { MovementThreshold = 500 };
-            _watcher.Start(false);
-            _watcher.StatusChanged += delegate(Object sender, GeoPositionStatusChangedEventArgs a) { 
-                if(a.Status == GeoPositionStatus.Ready)
-                    GetPhotos();
-            };
+
+            if (!appSettings.Contains("allowGps") || appSettings["allowGps"] as Boolean? == false)
+            {
+                GetPhotos();
+            }
+            else
+            {
+                _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) { MovementThreshold = 500 };
+                _watcher.Start(false);
+                _watcher.StatusChanged += delegate(Object sender, GeoPositionStatusChangedEventArgs a)
+                {
+                    if (a.Status == GeoPositionStatus.Ready)
+                        GetPhotos();
+                };
+            }
         }
 
         public static FlickrWrapper GetInstance()
@@ -63,7 +74,7 @@ namespace ImageSpot
         public void GetPhotos()
         {
             var options = DefaultOptions;
-            if (_watcher.Status == GeoPositionStatus.Ready)
+            if (_watcher != null && _watcher.Status == GeoPositionStatus.Ready)
             {
                 options.BoundaryBox = new BoundaryBox(_watcher.Position.Location.Longitude- 0.5, _watcher.Position.Location.Latitude - 0.5, _watcher.Position.Location.Longitude + 0.5, _watcher.Position.Location.Latitude + 0.5, GeoAccuracy.City);
                 //options.Longitude = _watcher.Position.Location.Longitude;

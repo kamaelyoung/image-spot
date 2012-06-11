@@ -11,13 +11,14 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True" Title="allow GPS">
 
     <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
@@ -29,6 +30,9 @@
         <Grid x:Name="ContentPanel" Grid.Row="1">
             <phone:WebBrowser HorizontalAlignment="Stretch" Name="webBrowser1" VerticalAlignment="Stretch"/>
         </Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <CheckBox Name="chkGps"/><TextBlock VerticalAlignment="Center">Allow GPS?</TextBlock>
+        </StackPanel>
     </Grid>
  
     <!--Beispielcode zur Verwendung von ApplicationBar-->

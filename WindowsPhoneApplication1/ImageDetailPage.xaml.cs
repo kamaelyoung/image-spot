@@ -6,7 +6,7 @@ using ImageSpot.ViewModels;
 using Microsoft.Phone.Controls;
 using Microsoft.Devices.Sensors;
 using Microsoft.Xna.Framework;
-
+using System.IO.IsolatedStorage;
 
 namespace ImageSpot
 {
@@ -17,6 +17,7 @@ namespace ImageSpot
         Compass compass;
         private double _lastCompass;
         GeoCoordinate currentCoordinate;
+        IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
 
         public ImageDetailPage()
         {
@@ -51,13 +52,16 @@ namespace ImageSpot
             {
                 noDir.Text = "compass not supported by your device!";
             }
-            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) { MovementThreshold = 500 };
-            _watcher.PositionChanged += delegate(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
-            {
-                Dispatcher.BeginInvoke(() => RecalcPosition());
-            };
 
-            _watcher.Start(false);
+            if (appSettings.Contains("allowGps") && appSettings["allowGps"] as Boolean? == true)
+            {
+                _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) { MovementThreshold = 500 };
+                _watcher.PositionChanged += delegate(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
+                {
+                    Dispatcher.BeginInvoke(() => RecalcPosition());
+                };
+                _watcher.Start(false);
+            }
         }
 
         void compass_CurrentValueChanged(object sender, SensorReadingEventArgs<CompassReading> e)
@@ -83,7 +87,7 @@ namespace ImageSpot
 
         private void UpdateUI(CompassReading compassReading)
         {
-            if (item.Position != null)
+            if (item.Position != null && _watcher != null)
             {
                 this.currentCoordinate = _watcher.Position.Location;
                 double y = item.Position.Latitude - currentCoordinate.Latitude;
