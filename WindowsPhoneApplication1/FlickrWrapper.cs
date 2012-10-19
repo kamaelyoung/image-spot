@@ -10,9 +10,9 @@ namespace ImageSpot
 {
     public class FlickrWrapper
     {
-        private const string Key = "9b23a7f748aadf005f5bd023fadcd879";
+        private const string Key = "YOUR_API_KEY_HERE"; //TODO add Flickr API id here
+        private const string Secret = "YOUR_SECRET_HERE";
         IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
-        private const string Secret = "f2e35e13b2b59d60";
         private const string OwnerPrefix = @"http://www.flickr.com/people/";
         private static FlickrWrapper _instance;
         private readonly Flickr _flickr;
